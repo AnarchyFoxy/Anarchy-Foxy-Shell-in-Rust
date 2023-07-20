@@ -16,3 +16,10 @@ fn display_logo() {
     println!(" (___/(_) (_)(____)(____)(____)");
 }
 
+// Function to parse the input command and arguments
+fn parse_command(input: &str) -> (String, Vec<String>) {
+    let mut tokens = input.trim().split_whitespace();
+    let command = tokens.next().unwrap_or("").to_string();
+    let arguments: Vec<String> = tokens.map(|s| s.to_string()).collect();
+    (command, arguments)
+}
