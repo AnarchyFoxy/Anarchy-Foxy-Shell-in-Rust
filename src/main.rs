@@ -47,3 +47,27 @@ fn execute_command(command: &str, args: &[String]) -> Result<(), Box<dyn Error>>
     }
     Ok(())
 }
+
+fn main() {
+    display_logo();
+
+    loop {
+        print!("Anarchy Foxy Shell $ ");
+        io::stdout().flush().unwrap();
+
+        let mut input = String::new();
+        io::stdin().read_line(&mut input).expect("Failed to read line");
+
+        let (command, arguments) = parse_command(&input);
+
+        if command == "exit" {
+            println!("Anarchy Foxy Says Goodbye!");
+            break;
+        }
+
+        match execute_command(&command, &arguments) {
+            Ok(_) => continue,
+            Err(err) => eprintln!("Error: {}", err),
+        }
+    }
+}
