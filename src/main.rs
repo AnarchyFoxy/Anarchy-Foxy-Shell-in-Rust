@@ -23,3 +23,27 @@ fn parse_command(input: &str) -> (String, Vec<String>) {
     let arguments: Vec<String> = tokens.map(|s| s.to_string()).collect();
     (command, arguments)
 }
+
+// Function to execute a command with arguments
+fn execute_command(command: &str, args: &[String]) -> Result<(), Box<dyn Error>> {
+    match command {
+        "cd" => {
+            if args.is_empty() {
+                let home_dir = env::var("HOME")?;
+                env::set_current_dir(&home_dir)?;
+            } else {
+                let new_dir = Path::new(&args[0]);
+                env::set_current_dir(new_dir)?;
+            }
+        }
+        _ => {
+            Command::new(command)
+                .args(args)
+                .stdin(Stdio::inherit())
+                .stdout(Stdio::inherit())
+                .stderr(Stdio::inherit())
+                .output()?;
+        }
+    }
+    Ok(())
+}
